@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Numbers</string>
+    <string name="add_number_txt">Добавить число</string>
+</resources>
