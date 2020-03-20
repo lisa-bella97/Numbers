@@ -41,7 +41,7 @@ public class NumberFragment extends Fragment {
 
         final TextView numberTextView = view.findViewById(R.id.number_txt_view);
         numberTextView.setText(String.valueOf(number));
-        numberTextView.setTextColor(Common.getColorOfNumber(getActivity(), number));
+        numberTextView.setTextColor(CommonUtils.getColorOfNumber(getActivity(), number));
 
         return view;
     }

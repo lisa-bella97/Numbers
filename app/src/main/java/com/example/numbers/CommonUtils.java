@@ -7,12 +7,12 @@ import androidx.fragment.app.FragmentActivity;
 
 import static androidx.core.content.res.ResourcesCompat.getColor;
 
-class Common {
-    static int getColorOfNumber(@Nullable FragmentActivity context, int number) {
+class CommonUtils {
+    static int getColorOfNumber(@Nullable FragmentActivity fragmentActivity, int number) {
         int evenNumberColor = 0;
         int oddNumberColor = 0;
-        if (context != null) {
-            final Resources resources = context.getResources();
+        if (fragmentActivity != null) {
+            final Resources resources = fragmentActivity.getResources();
             evenNumberColor = getColor(resources, R.color.evenNumberColor, null);
             oddNumberColor = getColor(resources, R.color.oddNumberColor, null);
         }
