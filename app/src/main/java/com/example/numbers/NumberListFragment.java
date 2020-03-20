@@ -27,11 +27,12 @@ public class NumberListFragment extends Fragment implements NumberListAdapter.On
 
     private int mLastNumber;
 
+    @NonNull
     static NumberListFragment newInstance(int numberCount) {
         final NumberListFragment fragment = new NumberListFragment();
         fragment.mLastNumber = numberCount;
 
-        Bundle bundle = new Bundle();
+        final Bundle bundle = new Bundle();
         bundle.putInt(KEY_LAST_NUMBER, fragment.mLastNumber);
 
         fragment.setArguments(bundle);
@@ -66,13 +67,13 @@ public class NumberListFragment extends Fragment implements NumberListAdapter.On
             columnsNum = COLS_NUM_HORIZONTAL;
         }
 
-        RecyclerView numbersListView = view.findViewById(R.id.numbers_list);
-        FragmentActivity context = getActivity();
-        NumberListAdapter listAdapter = new NumberListAdapter(Objects.requireNonNull(context), this, mLastNumber);
-        numbersListView.setLayoutManager(new GridLayoutManager(context, columnsNum));
+        final RecyclerView numbersListView = view.findViewById(R.id.numbers_list);
+        final FragmentActivity fragmentActivity = getActivity();
+        final NumberListAdapter listAdapter = new NumberListAdapter(Objects.requireNonNull(fragmentActivity), this, mLastNumber);
+        numbersListView.setLayoutManager(new GridLayoutManager(fragmentActivity, columnsNum));
         numbersListView.setAdapter(listAdapter);
 
-        Button addNumberBtn = view.findViewById(R.id.add_number_btn);
+        final Button addNumberBtn = view.findViewById(R.id.add_number_btn);
         addNumberBtn.setOnClickListener(v -> listAdapter.setDataSize(++mLastNumber));
 
         return view;
@@ -85,11 +86,11 @@ public class NumberListFragment extends Fragment implements NumberListAdapter.On
     }
 
     @Override
-    public void OnClickNumber(int number) {
-        FragmentManager fragmentManager = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
+    public void onClickNumber(int number) {
+        final FragmentManager fragmentManager = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
+        final FragmentTransaction transaction = fragmentManager.beginTransaction();
 
-        NumberFragment fragment = NumberFragment.newInstance(number);
+        final NumberFragment fragment = NumberFragment.newInstance(number);
         transaction.replace(R.id.fragment_container, fragment).addToBackStack(TRANSACTION_OPEN_NUMBER_FRAGMENT).commit();
     }
 }

@@ -11,13 +11,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.Objects;
 
 public class NumberListAdapter extends RecyclerView.Adapter<NumberViewHolder> {
-    private final FragmentActivity mContext;
+    private final FragmentActivity mFragmentActivity;
     private final OnClickNumberListener mListener;
 
     private int mDataSize;
 
-    NumberListAdapter(@NonNull FragmentActivity context, @NonNull OnClickNumberListener listener, int dataSize) {
-        mContext = Objects.requireNonNull(context);
+    NumberListAdapter(@NonNull FragmentActivity fragmentActivity, @NonNull OnClickNumberListener listener, int dataSize) {
+        mFragmentActivity = Objects.requireNonNull(fragmentActivity);
         mListener = Objects.requireNonNull(listener);
         mDataSize = dataSize;
     }
@@ -40,9 +40,9 @@ public class NumberListAdapter extends RecyclerView.Adapter<NumberViewHolder> {
     public void onBindViewHolder(@NonNull NumberViewHolder holder, int position) {
         final int number = position + 1;
         holder.setValue(number);
-        holder.setTextColor(Common.getColorOfNumber(mContext, number));
+        holder.setTextColor(CommonUtils.getColorOfNumber(mFragmentActivity, number));
 
-        holder.itemView.setOnClickListener(v -> mListener.OnClickNumber(number));
+        holder.itemView.setOnClickListener(v -> mListener.onClickNumber(number));
     }
 
     @Override
@@ -51,6 +51,6 @@ public class NumberListAdapter extends RecyclerView.Adapter<NumberViewHolder> {
     }
 
     public interface OnClickNumberListener {
-        void OnClickNumber(int number);
+        void onClickNumber(int number);
     }
 }
