@@ -10,11 +10,17 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class NumberListFragment extends Fragment {
+import java.util.Objects;
+
+public class NumberListFragment extends Fragment implements NumberListAdapter.OnClickNumberListener {
     private static final String KEY_LAST_NUMBER = "last_number";
+    private static final String TRANSACTION_OPEN_NUMBER_FRAGMENT = "openNumberFragment";
 
     private static final int COLS_NUM_VERTICAL = 3;
     private static final int COLS_NUM_HORIZONTAL = 4;
@@ -22,7 +28,7 @@ public class NumberListFragment extends Fragment {
     private int mLastNumber;
 
     static NumberListFragment newInstance(int numberCount) {
-        NumberListFragment fragment = new NumberListFragment();
+        final NumberListFragment fragment = new NumberListFragment();
         fragment.mLastNumber = numberCount;
 
         Bundle bundle = new Bundle();
@@ -36,17 +42,20 @@ public class NumberListFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Bundle arguments = getArguments();
-
+        final Bundle arguments = getArguments();
         if (arguments != null) {
             mLastNumber = arguments.getInt(KEY_LAST_NUMBER);
+        }
+
+        if (savedInstanceState != null) {
+            mLastNumber = savedInstanceState.getInt(KEY_LAST_NUMBER);
         }
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_list, container, false);
+        final View view = inflater.inflate(R.layout.fragment_list, container, false);
 
         if (savedInstanceState != null) {
             mLastNumber = savedInstanceState.getInt(KEY_LAST_NUMBER);
@@ -58,8 +67,9 @@ public class NumberListFragment extends Fragment {
         }
 
         RecyclerView numbersListView = view.findViewById(R.id.numbers_list);
-        NumberListAdapter listAdapter = new NumberListAdapter(getActivity(), mLastNumber);
-        numbersListView.setLayoutManager(new GridLayoutManager(getActivity(), columnsNum));
+        FragmentActivity context = getActivity();
+        NumberListAdapter listAdapter = new NumberListAdapter(Objects.requireNonNull(context), this, mLastNumber);
+        numbersListView.setLayoutManager(new GridLayoutManager(context, columnsNum));
         numbersListView.setAdapter(listAdapter);
 
         Button addNumberBtn = view.findViewById(R.id.add_number_btn);
@@ -72,5 +82,14 @@ public class NumberListFragment extends Fragment {
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(KEY_LAST_NUMBER, mLastNumber);
+    }
+
+    @Override
+    public void OnClickNumber(int number) {
+        FragmentManager fragmentManager = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+        NumberFragment fragment = NumberFragment.newInstance(number);
+        transaction.replace(R.id.fragment_container, fragment).addToBackStack(TRANSACTION_OPEN_NUMBER_FRAGMENT).commit();
     }
 }

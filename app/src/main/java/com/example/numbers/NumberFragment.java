@@ -13,9 +13,10 @@ import androidx.fragment.app.Fragment;
 public class NumberFragment extends Fragment {
     private static final String NUMBER_KEY = "number";
 
+    @NonNull
     static NumberFragment newInstance(int number) {
-        NumberFragment fragment = new NumberFragment();
-        Bundle bundle = new Bundle();
+        final NumberFragment fragment = new NumberFragment();
+        final Bundle bundle = new Bundle();
         bundle.putInt(NUMBER_KEY, number);
         fragment.setArguments(bundle);
 
@@ -30,15 +31,15 @@ public class NumberFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_number, container, false);
+        final View view = inflater.inflate(R.layout.fragment_number, container, false);
 
         int number = 0;
-        Bundle arguments = getArguments();
+        final Bundle arguments = getArguments();
         if (arguments != null) {
             number = arguments.getInt(NUMBER_KEY);
         }
 
-        TextView numberTextView = view.findViewById(R.id.number_txt_view);
+        final TextView numberTextView = view.findViewById(R.id.number_txt_view);
         numberTextView.setText(String.valueOf(number));
         numberTextView.setTextColor(Common.getColorOfNumber(getActivity(), number));
 
